@@ -1,0 +1,5 @@
+numpy
+matplotlib
+perfplot
+numba
+Cython
