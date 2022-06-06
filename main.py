@@ -1,38 +1,52 @@
 from time import time
 import numpy as np
-from common import progress_bar
-from heap import sqrt_sort_heap
+from utils import progress_bar, rprint, show_results_table
 from quadratico import sqrt_sort_quadratico
+from heap import sqrt_sort_heap
 
 
-sizes = [10**4, 10**5, 10**6, 10**7]
-repeticoes = 30  # Quantas vezes ele vai testar cada tamanho
+if __name__ == "__main__":
+    sizes = [
+        # 10**1,
+        # 10**2,
+        # 10**3,
+        # 10**4,
+        10**5,
+        # 10**6,
+        # 10**7,
+    ]
+    repeticoes = 1  # Quantas vezes ele vai testar cada tamanho
+
+    resultados = {
+        "quadratico": {size: [] for size in sizes},
+        "heap": {size: [] for size in sizes},
+    }
+
+    for i, metodo in enumerate(
+        [
+            # sqrt_sort_quadratico,
+            sqrt_sort_heap,
+        ]
+    ):
+        rprint("Usando Heap" if i else "Pelo Método Quadratico", style="bold underline")
+        for size in sizes:
+            tempos = []
+            for _ in progress_bar(repeticoes, size):
+                start = time()
+
+                array = np.random.randint(1000, size=size)
+                metodo(array)
+                # print(sorted(array))
+                # print(metodo(array))
+                # print(np.array_equal(metodo(array), np.sort(array)))
 
 
-res_quadratico = []
-res_heap = []
-metodos = [sqrt_sort_quadratico, sqrt_sort_heap]
+                end = time()
+                tempos.append(end - start)
 
+            if i == 0:
+                resultados["quadratico"][size] = tempos
+            else:
+                resultados["heap"][size] = tempos
 
-for i, metodo in enumerate(metodos):
-
-    print("Pelo Método Quadratico" if i == 0 else "Usando Heap")
-    for size in sizes:
-        tempos = []
-        for _ in progress_bar(repeticoes, desc=f"  Para n = 10^{int(np.log10(size))}"):
-            start = time()
-
-            np.random.seed(124)  # Seed the random number generator
-            array = np.random.randint(1000, size=size)
-
-            metodo(array)
-
-            end = time()
-            tempos.append(end - start)
-
-        media = round(np.mean(tempos), 3)
-        if i == 0:
-            res_quadratico.append(media)
-        else:
-            res_heap.append(media)
-
+    # show_results_table(resultados)

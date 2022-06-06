@@ -1,8 +1,6 @@
 import numba as nb
-import numpy as np
 from math import ceil, floor, sqrt
-from tqdm import trange
-
+import numpy as np
 
 @nb.experimental.jitclass([("V", nb.int64[:]), ("size", nb.int64)])
 class Parte:
@@ -33,17 +31,17 @@ class Parte:
 def particiona_array(array: np.ndarray) -> list[Parte]:
     n = array.size
 
-    max_len_parte = floor(sqrt(n))
-    n_partes = ceil(n / max_len_parte)
-    resto = n % max_len_parte
+    len_parte = floor(sqrt(n))
+    n_partes = ceil(n / len_parte)
+    resto = n % len_parte
 
     partes = []
     for i in range(n_partes):
-        start = i * max_len_parte
-        nxt = (i + 1) * max_len_parte
+        start = i * len_parte
+        nxt = (i + 1) * len_parte
 
         if (i != n_partes - 1) or (resto == 0):
-            p = Parte(array[start:nxt], max_len_parte)
+            p = Parte(array[start:nxt], len_parte)
         else:
             p = Parte(array[start:], resto)
 
@@ -51,15 +49,26 @@ def particiona_array(array: np.ndarray) -> list[Parte]:
 
     return partes
 
+# |────────────────────────────────────| Versão simplificado para por no projeto |────────────────────────────────────|
 
-def progress_bar(
-    iterable,
-    desc,
-    bar_format="{desc}: {percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt} [{rate_inv_fmt}]  ",
-):
-    return trange(
-        iterable,
-        unit=" ordenação",
-        desc=desc,
-        bar_format=bar_format,
-    )
+# def particiona_array(V):
+#     n = len(V)
+
+#     len_parte = floor(sqrt(n))
+#     n_partes = ceil(sqrt(n))
+
+#     partes = []
+
+#     for i in range(n_partes):
+#         start = i * len_parte
+#         nxt = (i + 1) * len_parte
+
+#         if i != n_partes - 1:
+#             p = V[start:nxt]
+#         else:
+#             p = V[start:]
+
+#         partes.append(p)
+
+#     return partes
+
