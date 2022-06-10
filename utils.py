@@ -1,4 +1,4 @@
-from tqdm import trange
+from tqdm.auto import trange
 from rich.console import Console
 from rich.table import Table
 import numpy as np
@@ -60,3 +60,5 @@ def progress_bar(
         desc=f"  Para n = 10^{int(np.log10(size))}",
         bar_format=bar_format,
     )
+
+

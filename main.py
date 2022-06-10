@@ -3,28 +3,28 @@ import numpy as np
 from utils import progress_bar, rprint, show_results_table
 from quadratico import sqrt_sort_quadratico
 from heap import sqrt_sort_heap
-
+from common import plot_array
 
 if __name__ == "__main__":
     sizes = [
         # 10**1,
         # 10**2,
         # 10**3,
-        # 10**4,
+        10**4,
         10**5,
-        # 10**6,
-        # 10**7,
+        10**6,
+        10**7,
     ]
-    repeticoes = 1  # Quantas vezes ele vai testar cada tamanho
+    repeticoes = 30  # Quantas vezes ele vai testar cada tamanho
 
     resultados = {
         "quadratico": {size: [] for size in sizes},
         "heap": {size: [] for size in sizes},
-    }
+    }   
 
     for i, metodo in enumerate(
         [
-            # sqrt_sort_quadratico,
+            sqrt_sort_quadratico,
             sqrt_sort_heap,
         ]
     ):
@@ -36,9 +36,6 @@ if __name__ == "__main__":
 
                 array = np.random.randint(1000, size=size)
                 metodo(array)
-                # print(sorted(array))
-                # print(metodo(array))
-                # print(np.array_equal(metodo(array), np.sort(array)))
 
 
                 end = time()
@@ -49,4 +46,5 @@ if __name__ == "__main__":
             else:
                 resultados["heap"][size] = tempos
 
-    # show_results_table(resultados)
+    plot_array(resultados, sizes)
+    
